@@ -1,24 +1,22 @@
-# ---- Base ----
-FROM node:20-alpine AS base
-WORKDIR /app
-ENV NODE_ENV=production
+## Deps & Build with Bun for speed, Runtime with Node for stability
 
 # ---- Deps ----
-FROM base AS deps
+FROM oven/bun:1 AS deps
 WORKDIR /app
-COPY package.json package-lock.json* ./
-RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
+COPY package.json bun.lockb* ./
+RUN bun install --ci || bun install
 
 # ---- Build ----
-FROM base AS build
+FROM oven/bun:1 AS build
 WORKDIR /app
 ENV NODE_ENV=development
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm run build
+# Use bunx to invoke Next.js
+RUN bunx --bun next build
 
-# ---- Runtime ----
-FROM base AS runtime
+# ---- Runtime (Node) ----
+FROM node:20-alpine AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
 
@@ -31,7 +29,5 @@ COPY --from=build /app/prisma ./prisma
 # Prisma needs OpenSSL for DB TLS
 RUN apk add --no-cache openssl
 
-# Port
 EXPOSE 3001
-
 CMD ["node", "server.js"]
