@@ -4,8 +4,45 @@
 
 ## Endpoints ที่ให้มาเริ่มต้น
 - `GET /api/health` — ตรวจสอบสถานะเซิร์ฟเวอร์
-- `GET /api/users` — อ่านรายชื่อผู้ใช้ทั้งหมด
-- `POST /api/users` — สร้างผู้ใช้ใหม่ จาก body `{ email: string, name?: string }`
+  
+- Users
+  - `GET /api/users?page&pageSize` — list เฉพาะฟิลด์ public
+  - `POST /api/users` — สร้างผู้ใช้ใหม่ `{ email, password }` (hash ด้วย bcrypt)
+  - `GET /api/users/:id`
+  - `PATCH /api/users/:id` — อัปเดต `{ email?, password? }`
+  - `DELETE /api/users/:id`
+
+- Dogs
+  - `GET /api/dogs?page&pageSize&userId` — filter ตาม `userId` ได้
+  - `POST /api/dogs` — ตามสคีมา Dog (ต้องมี `userId`, `name`, `gender`)
+  - `GET /api/dogs/:id`
+  - `PATCH /api/dogs/:id`
+  - `DELETE /api/dogs/:id`
+
+- Event Types
+  - `GET /api/event-types?page&pageSize`
+  - `POST /api/event-types` — `{ code, nameTh, category }`
+  - `GET /api/event-types/:id`
+  - `PATCH /api/event-types/:id`
+  - `DELETE /api/event-types/:id`
+
+- Dog Events
+  - `GET /api/dog-events?page&pageSize&dogId&eventTypeId&since&until`
+  - `POST /api/dog-events` — base + รายละเอียดแต่ละชนิดผ่าน `detail.type`
+    - ตัวอย่าง body:
+      ```json
+      {
+        "dogId": 1,
+        "eventTypeId": 1,
+        "eventAt": "2025-11-13T10:00:00.000Z",
+        "detail": { "type": "WEIGHT", "weightKg": 12.4 }
+      }
+      ```
+  - `GET /api/dog-events/:id`
+  - `DELETE /api/dog-events/:id`
+
+- Enums
+  - `GET /api/enums` — รายการค่าที่ใช้ในฟอร์ม: `Gender`, `EventCategory`, `LostStatus`
 
 ## โครงสร้าง
 ```

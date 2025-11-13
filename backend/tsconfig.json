@@ -7,19 +7,14 @@
       "DOM.Iterable"
     ],
     "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "jsx": "react-jsx",
-    "strict": true,
-  "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "./*"
-      ]
-    },
-    "noEmit": true,
+  "moduleResolution": "Bundler",
+  "jsx": "react-jsx",
+  "strict": true,
+  "noEmit": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "ignoreDeprecations": "6.0",
     "allowJs": false,
     "resolveJsonModule": true,
     "incremental": true,

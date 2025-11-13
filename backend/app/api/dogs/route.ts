@@ -1,22 +1,24 @@
 import { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { ok, badRequest, serverError } from '@/lib/http'
-import { userCreateSchema } from '@/lib/validators'
-import bcrypt from 'bcryptjs'
+import { dogCreateSchema } from '@/lib/validators'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const page = Math.max(1, Number(searchParams.get('page') ?? '1'))
   const pageSize = Math.min(100, Math.max(1, Number(searchParams.get('pageSize') ?? '20')))
+  const userId = searchParams.get('userId') ? Number(searchParams.get('userId')) : undefined
+
+  const where = userId ? { userId } : undefined
 
   const [items, total] = await Promise.all([
-    prisma.user.findMany({
+    prisma.dog.findMany({
+      where,
       skip: (page - 1) * pageSize,
       take: pageSize,
       orderBy: { createdAt: 'desc' },
-      select: { id: true, email: true, createdAt: true, updatedAt: true },
     }),
-    prisma.user.count(),
+    prisma.dog.count({ where }),
   ])
 
   return ok({ items, page, pageSize, total })
@@ -25,17 +27,13 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const json = await req.json()
-    const data = userCreateSchema.parse(json)
-    const passwordHash = await bcrypt.hash(data.password, 10)
+    const body = dogCreateSchema.parse(json)
 
-    const user = await prisma.user.create({
-      data: { email: data.email, passwordHash },
-      select: { id: true, email: true, createdAt: true, updatedAt: true },
-    })
-    return ok(user, { status: 201 })
+    const dog = await prisma.dog.create({ data: body })
+    return ok(dog, { status: 201 })
   } catch (err: any) {
     if (err?.name === 'ZodError') return badRequest('Invalid body', err)
-    if (err?.code === 'P2002') return badRequest('Email already exists')
+    if (err?.code === 'P2003') return badRequest('Invalid userId')
     return serverError(err)
   }
 }

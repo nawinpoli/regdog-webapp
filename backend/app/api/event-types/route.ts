@@ -1,8 +1,7 @@
 import { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { ok, badRequest, serverError } from '@/lib/http'
-import { userCreateSchema } from '@/lib/validators'
-import bcrypt from 'bcryptjs'
+import { eventTypeCreateSchema } from '@/lib/validators'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
@@ -10,13 +9,12 @@ export async function GET(req: NextRequest) {
   const pageSize = Math.min(100, Math.max(1, Number(searchParams.get('pageSize') ?? '20')))
 
   const [items, total] = await Promise.all([
-    prisma.user.findMany({
+    prisma.eventType.findMany({
       skip: (page - 1) * pageSize,
       take: pageSize,
-      orderBy: { createdAt: 'desc' },
-      select: { id: true, email: true, createdAt: true, updatedAt: true },
+      orderBy: { id: 'asc' },
     }),
-    prisma.user.count(),
+    prisma.eventType.count(),
   ])
 
   return ok({ items, page, pageSize, total })
@@ -25,17 +23,13 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const json = await req.json()
-    const data = userCreateSchema.parse(json)
-    const passwordHash = await bcrypt.hash(data.password, 10)
+    const body = eventTypeCreateSchema.parse(json)
 
-    const user = await prisma.user.create({
-      data: { email: data.email, passwordHash },
-      select: { id: true, email: true, createdAt: true, updatedAt: true },
-    })
-    return ok(user, { status: 201 })
+    const item = await prisma.eventType.create({ data: body })
+    return ok(item, { status: 201 })
   } catch (err: any) {
     if (err?.name === 'ZodError') return badRequest('Invalid body', err)
-    if (err?.code === 'P2002') return badRequest('Email already exists')
+    if (err?.code === 'P2002') return badRequest('code already exists')
     return serverError(err)
   }
 }
