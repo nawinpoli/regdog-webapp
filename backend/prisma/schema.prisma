@@ -1,19 +1,180 @@
-// Prisma schema for Postgres
-// Learn more: https://www.prisma.io/docs
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "postgresql"    
   url      = env("DATABASE_URL")
 }
 
+// ---------- ENUM ----------
+
+enum Gender {
+  MALE
+  FEMALE
+  UNKNOWN
+}
+
+enum EventCategory {
+  ACTIVITY
+  HEALTH
+  EXPENSE
+}
+
+enum LostStatus {
+  NORMAL
+  LOST
+  FOUND
+  UNKNOWN
+}
+
+// ---------- MODELS หลัก ----------
+
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+
+  dogs      Dog[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Dog {
+  id      Int  @id @default(autoincrement())
+  userId  Int
+  user    User @relation(fields: [userId], references: [id])
+
+  // ข้อมูลสุนัข
+  name            String
+  gender          Gender
+  breed           String?
+  birthDate       DateTime?
+  microchipNumber String?
+  pedigreeFileUrl String?
+  chronicDiseases String?
+  avatarUrl       String?
+
+  // ข้อมูลเจ้าของ + ใช้บน QR
+  ownerName        String?
+  ownerPhone       String?
+  ownerAddress     String?
+  extraDescription String?
+  lostStatus       LostStatus @default(NORMAL)
+
+  events    DogEvent[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EventType {
+  id       Int           @id @default(autoincrement())
+  code     String        @unique   // WALK / PLAY / TRAIN / ...
+  nameTh   String
+  category EventCategory
+
+  events DogEvent[]
+}
+
+model DogEvent {
+  id          Int        @id @default(autoincrement())
+  dogId       Int
+  dog         Dog        @relation(fields: [dogId], references: [id])
+
+  eventTypeId Int
+  eventType   EventType  @relation(fields: [eventTypeId], references: [id])
+
+  // วัน + เวลา (เอาไปแยกใน UI ได้)
+  eventAt   DateTime
+  note      String?
+  imageUrl  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relation 1-1 ไปตารางย่อยแต่ละประเภท (back-relations)
+  walkEvent       WalkEvent?       @relation("WalkEvent")
+  playEvent       PlayEvent?       @relation("PlayEvent")
+  trainingEvent   TrainingEvent?   @relation("TrainingEvent")
+  symptomEvent    SymptomEvent?    @relation("SymptomEvent")
+  vaccineEvent    VaccineEvent?    @relation("VaccineEvent")
+  medicationEvent MedicationEvent? @relation("MedicationEvent")
+  vetVisitEvent   VetVisitEvent?   @relation("VetVisitEvent")
+  weightEvent     WeightEvent?     @relation("WeightEvent")
+  expenseEvent    ExpenseEvent?    @relation("ExpenseEvent")
+}
+
+// ---------- MODELS รายละเอียดตามประเภท ----------
+
+// เดิน
+model WalkEvent {
+  eventId     Int      @id
+  event       DogEvent @relation("WalkEvent", fields: [eventId], references: [id])
+  distanceKm  Float?
+  durationMin Int?
+}
+
+// เวลาเล่น
+model PlayEvent {
+  eventId     Int      @id
+  event       DogEvent @relation("PlayEvent", fields: [eventId], references: [id])
+  durationMin Int?
+}
+
+// ฝึก
+model TrainingEvent {
+  eventId       Int      @id
+  event         DogEvent @relation("TrainingEvent", fields: [eventId], references: [id])
+  durationMin   Int?
+}
+
+// อาการ
+model SymptomEvent {
+  eventId    Int      @id
+  event      DogEvent @relation("SymptomEvent", fields: [eventId], references: [id])
+  symptom    String
+  severity   Int?     // ระดับความรุนแรง
+  sinceWhen  DateTime?
+}
+
+// วัคซีน
+model VaccineEvent {
+  eventId      Int      @id
+  event        DogEvent @relation("VaccineEvent", fields: [eventId], references: [id])
+}
+
+// ยา
+model MedicationEvent {
+  eventId       Int      @id
+  event         DogEvent @relation("MedicationEvent", fields: [eventId], references: [id])
+  dosageAmount  Float?
+  dosageUnit    String?  // mg / ml ฯลฯ
+}
+
+// พบสัตวแพทย์
+model VetVisitEvent {
+  eventId        Int      @id
+  event          DogEvent @relation("VetVisitEvent", fields: [eventId], references: [id])
+  reason         String?  // มาตรวจเรื่องอะไร
+  clinicName     String?
+  vetName        String?
+  cost           Float?
+  nextAppointment DateTime?
+}
+
+// น้ำหนัก
+model WeightEvent {
+  eventId   Int      @id
+  event     DogEvent @relation("WeightEvent", fields: [eventId], references: [id])
+  weightKg  Float
+}
+
+// ค่าใช้จ่าย
+model ExpenseEvent {
+  eventId     Int      @id
+  event       DogEvent @relation("ExpenseEvent", fields: [eventId], references: [id])
+  amount      Float
+  currency    String?  @default("THB")
 }
