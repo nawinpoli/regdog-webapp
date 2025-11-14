@@ -1,15 +1,19 @@
 "use client"
 
 import Link from "next/link"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { ArrowLeft, ArrowRight } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { ArrowLeft } from "lucide-react"
 
 export default function DogGenderPage() {
-	const [gender, setGender] = useState<string>("")
+	const router = useRouter()
+
+	const handleGenderSelect = (gender: string) => {
+		// Save gender if needed
+		router.push("/register/dog-birthdate")
+	}
 
 	return (
-		<div className="min-h-dvh w-full flex items-center justify-center px-4 py-6 sm:py-10 bg-[url('/background.png')] bg-cover bg-center bg-no-repeat pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+		<div className="min-h-dvh w-full flex justify-center px-4 py-6 sm:py-10 bg-[url('/background.png')] bg-cover bg-center bg-no-repeat pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
 			<div className="w-full max-w-md">
 				{/* Header */}
 				<div className="mb-8">
@@ -27,57 +31,25 @@ export default function DogGenderPage() {
 				</div>
 
 				{/* Title */}
-				<h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-center mb-8">
+				<h1 className="font-normal text-2xl font-anuphan tracking-tight text-center mb-8">
 					เพศสุนัขของคุณ
 				</h1>
 
 				{/* Gender Selection */}
-				<div className="space-y-6">
-					<div className="grid grid-cols-2 gap-4">
-						<button
-							onClick={() => setGender("male")}
-							className={`h-14 rounded-lg border-2 font-medium text-base transition-colors ${
-								gender === "male"
-									? "bg-cyan-200 border-cyan-300 text-black"
-									: "bg-white border-zinc-200 text-zinc-700 hover:bg-zinc-50"
-							}`}
-						>
-							เพศผู้
-						</button>
-						
-						<button
-							onClick={() => setGender("female")}
-							className={`h-14 rounded-lg border-2 font-medium text-base transition-colors ${
-								gender === "female"
-									? "bg-cyan-200 border-cyan-300 text-black"
-									: "bg-white border-zinc-200 text-zinc-700 hover:bg-zinc-50"
-							}`}
-						>
-							เพศเมีย
-						</button>
-					</div>
-
-					{/* Action Buttons */}
-					<div className="flex gap-3">
-						<Link href="/register/dog-name" className="flex-1">
-							<Button 
-								variant="outline"
-								className="w-full h-14 text-base font-medium border-2"
-							>
-								ข้าม
-							</Button>
-						</Link>
-						
-						<Link href="/register/dog-birthdate" className="flex-1">
-							<Button 
-								className="w-full h-14 text-base font-medium bg-yellow-300 text-black hover:bg-yellow-400"
-								disabled={!gender}
-							>
-								ต่อไป
-								<ArrowRight className="ml-2" size={20} />
-							</Button>
-						</Link>
-					</div>
+				<div className="grid grid-cols-2 gap-4">
+					<button
+						onClick={() => handleGenderSelect("male")}
+						className="rounded-full h-14 border border-73a2ac font-medium text-base transition-colors bg-white text-73a2ac hover:bg-zinc-50"
+					>
+						เพศผู้
+					</button>
+					
+					<button
+						onClick={() => handleGenderSelect("female")}
+						className="rounded-full h-14 border border-73a2ac font-medium text-base transition-colors bg-bce7f0 text-black hover:bg-[#8ddbeb]"
+					>
+						เพศเมีย
+					</button>
 				</div>
 			</div>
 		</div>

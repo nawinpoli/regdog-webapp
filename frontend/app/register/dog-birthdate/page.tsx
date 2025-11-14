@@ -10,7 +10,7 @@ export default function DogBirthdatePage() {
 	const [birthdate, setBirthdate] = useState("")
 
 	return (
-		<div className="min-h-dvh w-full flex items-center justify-center px-4 py-6 sm:py-10 bg-[url('/background.png')] bg-cover bg-center bg-no-repeat pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+		<div className="min-h-dvh w-full flex  justify-center px-4 py-6 sm:py-10 bg-[url('/background.png')] bg-cover bg-center bg-no-repeat pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
 			<div className="w-full max-w-md">
 				{/* Header */}
 				<div className="mb-8">
@@ -28,7 +28,7 @@ export default function DogBirthdatePage() {
 				</div>
 
 				{/* Title */}
-				<h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-center mb-8">
+				<h1 className="font-normal text-2xl font-anuphan tracking-tight text-center mb-8">
 					วันเกิดสุนัขของคุณ
 				</h1>
 
@@ -48,23 +48,25 @@ export default function DogBirthdatePage() {
 					</div>
 
 					{/* Action Buttons */}
-					<div className="flex gap-3">
-						<Link href="/register/dog-gender" className="flex-1">
+					<div className="flex items-start justify-end" style={{ gap: '5px' }}>
+						<Link href="/register/dog-breed">
 							<Button 
 								variant="outline"
-								className="w-full h-14 text-base font-medium border-2"
+								className="text-base font-medium border border-ffeca5 hover:bg-ffeca5"
+								style={{ width: '55px', height: '40px', borderRadius: '100px' }}
 							>
 								ข้าม
 							</Button>
 						</Link>
 						
-						<Link href="/register/dog-breed" className="flex-1">
+						<Link href="/register/dog-breed">
 							<Button 
-								className="w-full h-14 text-base font-medium bg-yellow-300 text-black hover:bg-yellow-400"
-								disabled={!birthdate}
+								className="text-base font-medium bg-ffeca5 text-black hover:bg-[#f9dc75] flex items-center gap-1"
+								style={{ width: '82px', height: '40px', borderRadius: '100px' }}
+                                disabled={!birthdate}
 							>
 								ต่อไป
-								<ArrowRight className="ml-2" size={20} />
+								<ArrowRight size={16} />
 							</Button>
 						</Link>
 					</div>

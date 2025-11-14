@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react"
 
 export default function DogOwnershipPage() {
 	return (
-		<div className="min-h-dvh w-full flex items-center justify-center px-4 py-6 sm:py-10 bg-[url('/background.png')] bg-cover bg-center bg-no-repeat pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+		<div className="min-h-dvh w-full flex justify-center px-4 py-6 sm:py-10 bg-[url('/background.png')] bg-cover bg-center bg-no-repeat pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
 			<div className="w-full max-w-md">
 				{/* Header */}
 				<div className="mb-8">
@@ -24,16 +24,16 @@ export default function DogOwnershipPage() {
 				</div>
 
 				{/* Title */}
-				<h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-center mb-8">
+				<h1 className="font-normal text-2xl font-anuphan tracking-tight text-center mb-8">
 					คุณมีสุนัขหรือไม่
 				</h1>
 
 				{/* Buttons */}
-				<div className="space-y-4">
+				<div className="flex flex-col gap-6">
 					<Link href="/register/dog-name">
 						<Button 
 							variant="outline"
-							className="w-full h-14 text-base font-medium border-2 hover:bg-zinc-50"
+							className="rounded-full w-full h-14 text-base font-medium border border-73a2ac hover:bg-zinc-50 text-73a2ac"
 						>
 							ฉันมีสุนัข
 						</Button>
@@ -41,7 +41,7 @@ export default function DogOwnershipPage() {
 					
 					<Link href="/register/dog-name">
 						<Button 
-							className="w-full h-14 text-base font-medium bg-cyan-200 text-black hover:bg-cyan-300 border-2 border-cyan-300"
+							className="rounded-full w-full h-14 text-base font-medium bg-bce7f0 text-black hover:bg-[#8ddbeb] border border-73a2ac"
 						>
 							ฉันไม่มีสุนัข
 						</Button>

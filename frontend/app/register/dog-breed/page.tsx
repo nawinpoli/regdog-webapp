@@ -21,7 +21,7 @@ export default function DogBreedPage() {
 	]
 
 	return (
-		<div className="min-h-dvh w-full flex items-center justify-center px-4 py-6 sm:py-10 bg-[url('/background.png')] bg-cover bg-center bg-no-repeat pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+		<div className="min-h-dvh w-full flex justify-center px-4 py-6 sm:py-10 bg-[url('/background.png')] bg-cover bg-center bg-no-repeat pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
 			<div className="w-full max-w-md">
 				{/* Header */}
 				<div className="mb-8">
@@ -39,7 +39,7 @@ export default function DogBreedPage() {
 				</div>
 
 				{/* Title */}
-				<h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-center mb-8">
+				<h1 className="font-normal text-2xl font-anuphan tracking-tight text-center mb-8">
 					สายพันธุ์สุนัขของคุณ
 				</h1>
 
@@ -48,22 +48,25 @@ export default function DogBreedPage() {
 					<div className="relative">
 						<button
 							onClick={() => setIsOpen(!isOpen)}
-							className="w-full h-14 px-4 flex items-center justify-between bg-cyan-200 hover:bg-cyan-300 rounded-lg border-2 border-cyan-300 text-left"
+							className="w-full h-14 px-4 flex items-center justify-center bg-bce7f0 hover:bg-[#8ddbeb] rounded-full border border-73a2ac relative"
 						>
 							<div className="flex items-center gap-2 text-zinc-600">
-								<span className="text-zinc-400">
-									<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<circle cx="10" cy="7" r="3" stroke="currentColor" strokeWidth="2"/>
-										<path d="M6 15C6 13 8 11 10 11C12 11 14 13 14 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+								<span className="text-73a2ac">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+										<path d="M11.25 16.25h1.5L12 17z"/>
+										<path d="M16 14v.5"/>
+										<path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a11.702 11.702 0 0 0-.493-3.309"/>
+										<path d="M8 14v.5"/>
+										<path d="M8.5 8.5c-.384 1.05-1.083 2.028-2.344 2.5-1.931.722-3.576-.297-3.656-1-.113-.994 1.177-6.53 4-7 1.923-.321 3.651.845 3.651 2.235A7.497 7.497 0 0 1 14 5.277c0-1.39 1.844-2.598 3.767-2.277 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/>
 									</svg>
 								</span>
-								<span className={breed ? "text-black" : "text-zinc-500"}>
+								<span className={breed ? "text-black" : "text-73a2ac"}>
 									{breed || "สายพันธุ์"}
 								</span>
 							</div>
 							<ChevronDown 
 								size={20} 
-								className={`text-zinc-600 transition-transform ${isOpen ? "rotate-180" : ""}`}
+								className={`text-73a2ac transition-transform absolute right-4 ${isOpen ? "rotate-180" : ""}`}
 							/>
 						</button>
 
@@ -87,23 +90,25 @@ export default function DogBreedPage() {
 					</div>
 
 					{/* Action Buttons */}
-					<div className="flex gap-3">
-						<Link href="/register/dog-birthdate" className="flex-1">
+					<div className="flex items-start justify-end" style={{ gap: '5px' }}>
+						<Link href="/register/dog-birthdate">
 							<Button 
 								variant="outline"
-								className="w-full h-14 text-base font-medium border-2"
+								className="text-base font-medium border border-ffeca5 hover:bg-ffeca5"
+								style={{ width: '55px', height: '40px', borderRadius: '100px' }}
 							>
 								ข้าม
 							</Button>
 						</Link>
 						
-						<Link href="/" className="flex-1">
+						<Link href="/">
 							<Button 
-								className="w-full h-14 text-base font-medium bg-yellow-300 text-black hover:bg-yellow-400"
+								className="text-base font-medium bg-ffeca5 text-black hover:bg-[#f9dc75] flex items-center gap-1"
+								style={{ width: '82px', height: '40px', borderRadius: '100px' }}
 								disabled={!breed}
 							>
 								ต่อไป
-								<ArrowRight className="ml-2" size={20} />
+								<ArrowRight size={16} />
 							</Button>
 						</Link>
 					</div>

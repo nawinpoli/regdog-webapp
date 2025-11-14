@@ -18,13 +18,13 @@ export default function RegisterPage() {
 					>
 						<ArrowLeft size={24} />
 					</Link>
-					<h1 className="font-medium text-[16px] leading-[100%] tracking-[0] text-center ">สร้างบัญชีใหม่</h1>
+					<h1 className="font-medium text-[16px] leading-[100%] tracking-[0] text-center font-anuphan">สร้างบัญชีใหม่</h1>
 				</div>
 
 				{/* Titles */}
 				<div className="space-y-1 mb-6 sm:mb-8">
-					<p className="font-normal text-[24px] leading-[100%] tracking-[0] align-middle">ยินดีต้อนรับสู่ RegDog</p>
-					<h2 className="font-medium text-[32px] leading-[100%] tracking-[0] align-middle ">สร้างบัญชีของคุณ</h2>
+					<p className="font-normal text-[24px] leading-[100%] tracking-[0] align-middle font-anuphan">ยินดีต้อนรับสู่ RegDog</p>
+					<h2 className="font-medium text-[32px] leading-[100%] tracking-[0] align-middle font-anuphan">สร้างบัญชีของคุณ</h2>
 				</div>
 
 				{/* Form */}
@@ -77,7 +77,7 @@ export default function RegisterPage() {
 					<Link href="/register/dog-ownership">
 						<Button 
 							type="button" 
-							className="w-full h-12 text-base font-medium bg-yellow-300 text-black hover:bg-yellow-400 mt-6"
+							className="rounded-full w-full h-12 text-base font-medium bg-ffeca5 text-black hover:bg-[#f9dc75] mt-6"
 						>
 							สร้างบัญชี
 						</Button>

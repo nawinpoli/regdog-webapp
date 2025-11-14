@@ -10,7 +10,7 @@ export default function DogNamePage() {
 	const [name, setName] = useState("")
 
 	return (
-		<div className="min-h-dvh w-full flex items-center justify-center px-4 py-6 sm:py-10 bg-[url('/background.png')] bg-cover bg-center bg-no-repeat pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+		<div className="min-h-dvh w-full flex justify-center px-4 py-6 sm:py-10 bg-[url('/background.png')] bg-cover bg-center bg-no-repeat pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
 			<div className="w-full max-w-md">
 				{/* Header */}
 				<div className="mb-8">
@@ -28,7 +28,7 @@ export default function DogNamePage() {
 				</div>
 
 				{/* Title */}
-				<h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-center mb-8">
+				<h1 className="font-normal text-2xl font-anuphan tracking-tight text-center mb-8">
 					ชื่อสุนัขของคุณ
 				</h1>
 
@@ -36,8 +36,11 @@ export default function DogNamePage() {
 				<div className="space-y-6">
 					<div className="relative">
 						<span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">
-							<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path d="M10 2L12 8L18 10L12 12L10 18L8 12L2 10L8 8L10 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+								<circle cx="11" cy="4" r="2"/>
+								<circle cx="18" cy="8" r="2"/>
+								<circle cx="20" cy="16" r="2"/>
+								<path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/>
 							</svg>
 						</span>
 						<Input 
@@ -50,23 +53,25 @@ export default function DogNamePage() {
 					</div>
 
 					{/* Action Buttons */}
-					<div className="flex gap-3">
-						<Link href="/register/dog-ownership" className="flex-1">
+					<div className="flex items-start justify-end" style={{ gap: '5px' }}>
+						<Link href="/register/dog-gender">
 							<Button 
 								variant="outline"
-								className="w-full h-14 text-base font-medium border-2"
+								className="text-base font-medium border border-ffeca5 hover:bg-ffeca5"
+								style={{ width: '55px', height: '40px', borderRadius: '100px' }}
 							>
 								ข้าม
 							</Button>
 						</Link>
 						
-						<Link href="/register/dog-gender" className="flex-1">
+						<Link href="/register/dog-gender">
 							<Button 
-								className="w-full h-14 text-base font-medium bg-yellow-300 text-black hover:bg-yellow-400"
-								disabled={!name.trim()}
+								className="text-base font-medium bg-ffeca5 text-black hover:bg-[#f9dc75] flex items-center gap-1"
+								style={{ width: '82px', height: '40px', borderRadius: '100px' }}
+                                disabled={!name}
 							>
 								ต่อไป
-								<ArrowRight className="ml-2" size={20} />
+								<ArrowRight size={16} />
 							</Button>
 						</Link>
 					</div>

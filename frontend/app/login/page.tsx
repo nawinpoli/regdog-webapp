@@ -39,14 +39,13 @@ export default function LoginPage() {
 
 				{/* Titles */}
 				<div className="space-y-1 mb-5 sm:mb-6">
-					<p className="text-zinc-700">ยินดีต้อนรับสู่ RegDog</p>
-					<h1 className="text-3xl font-bold tracking-tight">เข้าสู่บัญชีของคุณ</h1>
+					<p className="font-normal text-2xl font-anuphan">ยินดีต้อนรับสู่ RegDog</p>
+					<h1 className="font-medium text-4xl font-anuphan">เข้าสู่บัญชีของคุณ</h1>
 				</div>
 
 				{/* Form */}
 				<form className="space-y-4" onSubmit={(e)=>e.preventDefault()}>
 					<div className="space-y-2">
-						<Label htmlFor="email">อีเมล</Label>
 						<div className="relative">
 							<span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">
 								<Mail size={18} />
@@ -56,10 +55,6 @@ export default function LoginPage() {
 					</div>
 
 					<div className="space-y-2">
-						<div className="flex items-center justify-between">
-							<Label htmlFor="password">รหัสผ่าน</Label>
-							<Link href="#" className="text-sm text-zinc-500 hover:text-zinc-700">ลืมรหัสผ่าน?</Link>
-						</div>
 						<div className="relative">
 							<span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">
 								<Lock size={18} />
@@ -69,9 +64,12 @@ export default function LoginPage() {
 								{show ? <EyeOff size={18}/> : <Eye size={18}/>} 
 							</button>
 						</div>
+                        <div className="flex items-center justify-end">
+							<Link href="#" className="text-sm text-zinc-500 hover:text-zinc-700 font-anuphan">ลืมรหัสผ่าน?</Link>
+						</div>
 					</div>
 
-					<Button type="submit" className="w-full h-12 text-base font-medium bg-yellow-300 text-black hover:bg-yellow-400">
+					<Button type="submit" className="rounded-full w-full h-12 text-base font-medium bg-ffeca5 text-black hover:bg-[#f9dc75] font-anuphan">
 						เข้าสู่ระบบ
 					</Button>
 				</form>
@@ -84,7 +82,7 @@ export default function LoginPage() {
 				</div>
 
 				{/* Google Sign-in */}
-				<Button variant="outline" className="w-full h-12 text-base">
+				<Button variant="outline" className="rounded-full w-full h-12 text-base">
 					<GoogleIcon className="mr-2 h-5 w-5" />
 					Google
 				</Button>
