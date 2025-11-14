@@ -1,26 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&display=swap");
 @import "tailwindcss";
-
+.mobile {
+  position: relative;
+  max-width: 448px;
+  margin: 0 auto;
+  min-height: 100vh;
+  height: auto;
+  outline: 1px solid red;
+}
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --anuphan: "Anuphan", sans-serif;
+  --inter: "Inter", sans-serif;
+  --fcf6bd: #fcf6bd;
+  --d0f4de: #d0f4de;
+  --ffbbda: #ffbbda;
+  --e8cff8: #e8cff8;
+  --c0e4f6: #c0e4f6;
+  --d0f5ab: #d0f5ab;
+  --bce7f0: #bce7f0;
+  --ffeca5: #ffeca5;
+  --f6d2ff: #f6d2ff;
+  --dad3ff: #dad3ff;
+  --73a2ac: #73a2ac;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-fcf6bd: var(--ffeca5);
+  --color-d0f5ab: var(--d0f5ab);
+  --color-ffbbda: var(--ffbbda);
+  --color-e8cff8: var(--e8cff8);
+  --color-c0e4f6: var(--c0e4f6);
+  --color-d0f5ab: var(--d0f5ab);
+  --color-bce7f0: var(--bce7f0);
+  --color-ffeca5: var(--ffeca5);
+  --color-f6d2ff: var(--f6d2ff);
+  --color-dad3ff: var(--dad3ff);
+  --color-73a2ac: var(--73a2ac);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  --font-anuphan: var(--anuphan);
+  --font-inter: var(--inter);
 }
