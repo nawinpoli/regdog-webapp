@@ -14,6 +14,7 @@
   --foreground: #171717;
   --anuphan: "Anuphan", sans-serif;
   --inter: "Inter", sans-serif;
+  --font-primary: "Anuphan", "Inter", sans-serif;
   --fcf6bd: #fcf6bd;
   --d0f4de: #d0f4de;
   --ffbbda: #ffbbda;
@@ -41,8 +42,7 @@
   --color-f6d2ff: var(--f6d2ff);
   --color-dad3ff: var(--dad3ff);
   --color-73a2ac: var(--73a2ac);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: "Anuphan", "Inter", sans-serif;
   --font-anuphan: var(--anuphan);
   --font-inter: var(--inter);
 }
