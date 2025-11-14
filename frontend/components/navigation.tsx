@@ -15,7 +15,7 @@ const Navigation = () => {
     { icon: Dog, label: "โปรไฟล์", pathname: "/profile" },
   ];
   return (
-    <nav className="flex justify-between items-center flex-row w-fit h-[62px] bg-blue-200 rounded-full">
+    <nav className="flex justify-between items-center flex-row w-fit h-[62px] bg-blue-200 rounded-full absolute bottom-[35px]">
       {navigationItems.map((item, index) => (
         <button
           key={index}
