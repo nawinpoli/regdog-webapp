@@ -5,9 +5,20 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ArrowLeft, ArrowRight, Calendar } from "lucide-react"
+import { useDogRegistration } from "@/contexts/dog-registration-context"
+import { useRouter } from "next/navigation"
 
 export default function DogBirthdatePage() {
-	const [birthdate, setBirthdate] = useState("")
+	const { dogData, updateDogData } = useDogRegistration()
+	const [birthdate, setBirthdate] = useState(dogData.birthDate)
+	const router = useRouter()
+
+	const handleNext = (skip: boolean) => {
+		if (!skip) {
+			updateDogData({ birthDate: birthdate })
+		}
+		router.push("/register/dog-breed")
+	}
 
 	return (
 		<div className="min-h-dvh w-full flex  justify-center px-4 py-6 sm:py-10 bg-[url('/background.png')] bg-cover bg-center bg-no-repeat pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
@@ -49,26 +60,24 @@ export default function DogBirthdatePage() {
 
 					{/* Action Buttons */}
 					<div className="flex items-start justify-end" style={{ gap: '5px' }}>
-						<Link href="/register/dog-breed">
-							<Button 
-								variant="outline"
-								className="text-base font-medium border border-ffeca5 hover:bg-ffeca5"
-								style={{ width: '55px', height: '40px', borderRadius: '100px' }}
-							>
-								ข้าม
-							</Button>
-						</Link>
+						<Button 
+							variant="outline"
+							className="text-base font-medium border border-ffeca5 hover:bg-ffeca5"
+							style={{ width: '55px', height: '40px', borderRadius: '100px' }}
+							onClick={() => handleNext(true)}
+						>
+							ข้าม
+						</Button>
 						
-						<Link href="/register/dog-breed">
-							<Button 
-								className="text-base font-medium bg-ffeca5 text-black hover:bg-[#f9dc75] flex items-center gap-1"
-								style={{ width: '82px', height: '40px', borderRadius: '100px' }}
-                                disabled={!birthdate}
-							>
-								ต่อไป
-								<ArrowRight size={16} />
-							</Button>
-						</Link>
+						<Button 
+							className="text-base font-medium bg-ffeca5 text-black hover:bg-[#f9dc75] flex items-center gap-1"
+							style={{ width: '82px', height: '40px', borderRadius: '100px' }}
+							disabled={!birthdate}
+							onClick={() => handleNext(false)}
+						>
+							ต่อไป
+							<ArrowRight size={16} />
+						</Button>
 					</div>
 				</div>
 			</div>

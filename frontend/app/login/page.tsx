@@ -9,9 +9,16 @@ import { Separator } from "@/components/ui/separator"
 import { Mail, Lock, Eye, EyeOff } from "lucide-react"
 import { useState } from "react"
 import { GoogleIcon } from "@/components/google-icon"
+import { loginUser } from "@/lib/api"
+import { useRouter } from "next/navigation"
 
 export default function LoginPage() {
 	const [show, setShow] = useState(false)
+	const [email, setEmail] = useState("")
+	const [password, setPassword] = useState("")
+	const [loading, setLoading] = useState(false)
+	const [error, setError] = useState("")
+	const router = useRouter()
 
 	return (
 		<div
@@ -44,13 +51,37 @@ export default function LoginPage() {
 				</div>
 
 				{/* Form */}
-				<form className="space-y-4" onSubmit={(e)=>e.preventDefault()}>
+				<form className="space-y-4" onSubmit={async (e) => {
+					e.preventDefault()
+					setError("")
+					setLoading(true)
+					
+					const result = await loginUser({ email, password })
+					setLoading(false)
+					
+					if (result.status === 200 && result.data) {
+						// บันทึก userId ลง localStorage
+						localStorage.setItem("userId", result.data.id)
+						localStorage.setItem("userEmail", result.data.email)
+						router.push("/")
+					} else {
+						setError(result.error || "อีเมลหรือรหัสผ่านไม่ถูกต้อง")
+					}
+				}}>
 					<div className="space-y-2">
 						<div className="relative">
 							<span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">
 								<Mail size={18} />
 							</span>
-							<Input id="email" type="email" placeholder="อีเมล" className="pl-10" required />
+							<Input 
+								id="email" 
+								type="email" 
+								placeholder="อีเมล" 
+								className="pl-10" 
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+								required 
+							/>
 						</div>
 					</div>
 
@@ -59,7 +90,15 @@ export default function LoginPage() {
 							<span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">
 								<Lock size={18} />
 							</span>
-							<Input id="password" type={show?"text":"password"} placeholder="รหัสผ่าน" className="pl-10 pr-10" required />
+							<Input 
+								id="password" 
+								type={show?"text":"password"} 
+								placeholder="รหัสผ่าน" 
+								className="pl-10 pr-10" 
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+								required 
+							/>
 							<button type="button" aria-label="toggle password" onClick={()=>setShow(v=>!v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-700">
 								{show ? <EyeOff size={18}/> : <Eye size={18}/>} 
 							</button>
@@ -69,8 +108,12 @@ export default function LoginPage() {
 						</div>
 					</div>
 
-					<Button type="submit" className="rounded-full w-full h-12 text-base font-medium bg-ffeca5 text-black hover:bg-[#f9dc75] font-anuphan">
-						เข้าสู่ระบบ
+					{error && (
+						<p className="text-sm text-red-500 font-anuphan">{error}</p>
+					)}
+
+					<Button type="submit" disabled={loading} className="rounded-full w-full h-12 text-base font-medium bg-ffeca5 text-black hover:bg-[#f9dc75] font-anuphan disabled:opacity-50">
+						{loading ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
 					</Button>
 				</form>
 

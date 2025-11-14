@@ -3,12 +3,14 @@
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ArrowLeft } from "lucide-react"
+import { useDogRegistration } from "@/contexts/dog-registration-context"
 
 export default function DogGenderPage() {
+	const { updateDogData } = useDogRegistration()
 	const router = useRouter()
 
-	const handleGenderSelect = (gender: string) => {
-		// Save gender if needed
+	const handleGenderSelect = (gender: "MALE" | "FEMALE") => {
+		updateDogData({ gender })
 		router.push("/register/dog-birthdate")
 	}
 
@@ -38,14 +40,14 @@ export default function DogGenderPage() {
 				{/* Gender Selection */}
 				<div className="grid grid-cols-2 gap-4">
 					<button
-						onClick={() => handleGenderSelect("male")}
+						onClick={() => handleGenderSelect("MALE")}
 						className="rounded-full h-14 border border-73a2ac font-medium text-base transition-colors bg-white text-73a2ac hover:bg-zinc-50"
 					>
 						เพศผู้
 					</button>
 					
 					<button
-						onClick={() => handleGenderSelect("female")}
+						onClick={() => handleGenderSelect("FEMALE")}
 						className="rounded-full h-14 border border-73a2ac font-medium text-base transition-colors bg-bce7f0 text-black hover:bg-[#8ddbeb]"
 					>
 						เพศเมีย

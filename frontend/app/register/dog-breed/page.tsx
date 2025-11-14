@@ -4,10 +4,16 @@ import Link from "next/link"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, ArrowRight, ChevronDown } from "lucide-react"
+import { useDogRegistration } from "@/contexts/dog-registration-context"
+import { createDog } from "@/lib/api"
+import { useRouter } from "next/navigation"
 
 export default function DogBreedPage() {
-	const [breed, setBreed] = useState("")
+	const { dogData, updateDogData } = useDogRegistration()
+	const [breed, setBreed] = useState(dogData.breed)
 	const [isOpen, setIsOpen] = useState(false)
+	const [loading, setLoading] = useState(false)
+	const router = useRouter()
 
 	const breeds = [
 		"โกลเด้น รีทรีฟเวอร์",
@@ -19,6 +25,44 @@ export default function DogBreedPage() {
 		"เช็พเพิร์ด",
 		"อื่นๆ"
 	]
+
+	const handleSubmit = async (skip: boolean) => {
+		if (!skip) {
+			updateDogData({ breed })
+		}
+
+		// ถ้าไม่มีข้อมูล hasDog หรือเลือกไม่มีสุนัข ให้ข้ามไปหน้าหลัก
+		if (!dogData.hasDog) {
+			router.push("/")
+			return
+		}
+
+		const userId = localStorage.getItem("userId")
+		if (!userId) {
+			alert("กรุณาเข้าสู่ระบบก่อน")
+			router.push("/login")
+			return
+		}
+
+		setLoading(true)
+
+		const dogPayload = {
+			userId: parseInt(userId),
+			name: dogData.name || "ไม่ระบุ",
+			gender: dogData.gender || "UNKNOWN" as "MALE" | "FEMALE" | "UNKNOWN",
+			breed: skip ? undefined : breed || undefined,
+			birthDate: dogData.birthDate || undefined,
+		}
+
+		const result = await createDog(dogPayload)
+		setLoading(false)
+
+		if (result.status === 201) {
+			router.push("/")
+		} else {
+			alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล")
+		}
+	}
 
 	return (
 		<div className="min-h-dvh w-full flex justify-center px-4 py-6 sm:py-10 bg-[url('/background.png')] bg-cover bg-center bg-no-repeat pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
@@ -91,26 +135,29 @@ export default function DogBreedPage() {
 
 					{/* Action Buttons */}
 					<div className="flex items-start justify-end" style={{ gap: '5px' }}>
-						<Link href="/register/dog-birthdate">
-							<Button 
-								variant="outline"
-								className="text-base font-medium border border-ffeca5 hover:bg-ffeca5"
-								style={{ width: '55px', height: '40px', borderRadius: '100px' }}
-							>
-								ข้าม
-							</Button>
-						</Link>
+						<Button 
+							variant="outline"
+							className="text-base font-medium border border-ffeca5 hover:bg-ffeca5"
+							style={{ width: '55px', height: '40px', borderRadius: '100px' }}
+							onClick={async () => {
+								await handleSubmit(true)
+							}}
+							disabled={loading}
+						>
+							ข้าม
+						</Button>
 						
-						<Link href="/">
-							<Button 
-								className="text-base font-medium bg-ffeca5 text-black hover:bg-[#f9dc75] flex items-center gap-1"
-								style={{ width: '82px', height: '40px', borderRadius: '100px' }}
-								disabled={!breed}
-							>
-								ต่อไป
-								<ArrowRight size={16} />
-							</Button>
-						</Link>
+						<Button 
+							className="text-base font-medium bg-ffeca5 text-black hover:bg-[#f9dc75] flex items-center gap-1"
+							style={{ width: '82px', height: '40px', borderRadius: '100px' }}
+							disabled={!breed || loading}
+							onClick={async () => {
+								await handleSubmit(false)
+							}}
+						>
+							{loading ? "..." : "ต่อไป"}
+							<ArrowRight size={16} />
+						</Button>
 					</div>
 				</div>
 			</div>

@@ -5,8 +5,17 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Mail, Lock, ArrowLeft } from "lucide-react"
+import { useState } from "react"
+import { registerUser } from "@/lib/api"
+import { useRouter } from "next/navigation"
 
 export default function RegisterPage() {
+	const [email, setEmail] = useState("")
+	const [password, setPassword] = useState("")
+	const [confirmPassword, setConfirmPassword] = useState("")
+	const [loading, setLoading] = useState(false)
+	const [error, setError] = useState("")
+	const router = useRouter()
 	return (
 		<div className="min-h-dvh w-full flex justify-center px-4 py-6 sm:py-10 bg-[url('/background.png')] bg-cover bg-center bg-no-repeat pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
 			<div className="w-full max-w-md">
@@ -28,7 +37,35 @@ export default function RegisterPage() {
 				</div>
 
 				{/* Form */}
-				<form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
+				<form className="space-y-3" onSubmit={async (e) => {
+					e.preventDefault()
+					setError("")
+					
+					// ตรวจสอบรหัสผ่านตรงกันหรือไม่
+					if (password !== confirmPassword) {
+						setError("รหัสผ่านไม่ตรงกัน")
+						return
+					}
+					
+					// ตรวจสอบความยาวรหัสผ่าน
+					if (password.length < 6) {
+						setError("รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร")
+						return
+					}
+					
+					setLoading(true)
+					const result = await registerUser({ email, password })
+					setLoading(false)
+					
+					if (result.status === 201 && result.data) {
+						// บันทึก userId
+						localStorage.setItem("userId", result.data.id)
+						localStorage.setItem("userEmail", result.data.email)
+						router.push("/register/dog-ownership")
+					} else {
+						setError(result.error || result.data?.message || "เกิดข้อผิดพลาด")
+					}
+				}}>
 					<div className="space-y-2">
 						<div className="relative">
 							<span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">
@@ -39,6 +76,8 @@ export default function RegisterPage() {
 								type="email" 
 								placeholder="อีเมล" 
 								className="pl-10" 
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
 								required 
 							/>
 						</div>
@@ -54,6 +93,8 @@ export default function RegisterPage() {
 								type="password" 
 								placeholder="รหัสผ่าน" 
 								className="pl-10" 
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
 								required 
 							/>
 						</div>
@@ -69,19 +110,24 @@ export default function RegisterPage() {
 								type="password" 
 								placeholder="ยืนยันรหัสผ่าน" 
 								className="pl-10" 
+								value={confirmPassword}
+								onChange={(e) => setConfirmPassword(e.target.value)}
 								required 
 							/>
 						</div>
 					</div>
 
-					<Link href="/register/dog-ownership">
-						<Button 
-							type="button" 
-							className="rounded-full w-full h-12 text-base font-medium bg-ffeca5 text-black hover:bg-[#f9dc75] mt-6"
-						>
-							สร้างบัญชี
-						</Button>
-					</Link>
+					{error && (
+						<p className="text-sm text-red-500 font-anuphan">{error}</p>
+					)}
+
+					<Button 
+						type="submit" 
+						disabled={loading}
+						className="rounded-full w-full h-12 text-base font-medium bg-ffeca5 text-black hover:bg-[#f9dc75] mt-6 disabled:opacity-50"
+					>
+						{loading ? "กำลังสร้างบัญชี..." : "สร้างบัญชี"}
+					</Button>
 				</form>
 
 				{/* Footer */}
