@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { ok, badRequest, notFound, serverError } from '@/lib/http'
 import { dogUpdateSchema } from '@/lib/validators'
+import { calculateAge } from '@/lib/utils'
 
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id: idStr } = await params
@@ -9,7 +10,7 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
   if (!Number.isInteger(id)) return badRequest('Invalid id')
   const dog = await prisma.dog.findUnique({ where: { id } })
   if (!dog) return notFound('Dog not found')
-  return ok(dog)
+  return ok({ ...dog, age: calculateAge(dog.birthDate) })
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -21,7 +22,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     const body = dogUpdateSchema.parse(json)
 
     const dog = await prisma.dog.update({ where: { id }, data: body })
-    return ok(dog)
+    return ok({ ...dog, age: calculateAge(dog.birthDate) })
   } catch (err: any) {
     if (err?.name === 'ZodError') return badRequest('Invalid body', err)
     if (err?.code === 'P2025') return notFound('Dog not found')

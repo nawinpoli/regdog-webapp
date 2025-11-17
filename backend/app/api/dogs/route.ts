@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { ok, badRequest, serverError } from '@/lib/http'
 import { dogCreateSchema } from '@/lib/validators'
+import { calculateAge } from '@/lib/utils'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
@@ -21,7 +22,13 @@ export async function GET(req: NextRequest) {
     prisma.dog.count({ where }),
   ])
 
-  return ok({ items, page, pageSize, total })
+  // เพิ่ม age field ให้แต่ละตัว
+  const itemsWithAge = items.map(dog => ({
+    ...dog,
+    age: calculateAge(dog.birthDate)
+  }))
+
+  return ok({ items: itemsWithAge, page, pageSize, total })
 }
 
 export async function POST(req: NextRequest) {
@@ -30,7 +37,7 @@ export async function POST(req: NextRequest) {
     const body = dogCreateSchema.parse(json)
 
     const dog = await prisma.dog.create({ data: body })
-    return ok(dog, { status: 201 })
+    return ok({ ...dog, age: calculateAge(dog.birthDate) }, { status: 201 })
   } catch (err: any) {
     if (err?.name === 'ZodError') return badRequest('Invalid body', err)
     if (err?.code === 'P2003') return badRequest('Invalid userId')
