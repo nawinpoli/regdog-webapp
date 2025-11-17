@@ -68,3 +68,61 @@ export async function createDog(data: DogData): Promise<ApiResponse> {
     return { error: 'Network error', status: 500 }
   }
 }
+type DogsListResponse = {
+  items: DogData[];
+  page: number;
+  pageSize: number;
+  total: number;
+};
+
+export async function getDogs(
+  userId: number,
+  page: number,
+  pageSize: number
+): Promise<ApiResponse<DogsListResponse>> {
+  try {
+    const params = new URLSearchParams({
+      userId: userId.toString(),
+      page: page.toString(),
+      pageSize: pageSize.toString(),
+    });
+
+    const res = await fetch(`${API_BASE_URL}/api/dogs?${params.toString()}`);
+    const json = await res.json();
+    return { data: json, status: res.status };
+  } catch (error) {
+    return { error: "Network error", status: 500 };
+  }
+}
+
+export async function getDogById(
+  dogId: number
+): Promise<ApiResponse<DogData>> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/dogs/${dogId}`);
+    const json = await res.json();
+    return { data: json, status: res.status };
+  } catch (error) {
+    return { error: "Network error", status: 500 };
+  }
+}
+
+
+export async function updateDog(
+  id: number,
+  data: Partial<DogData>,
+): Promise<ApiResponse> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/dogs/${id}`, {
+      method: "PATCH",                     // <= สำคัญ: PATCH
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    const json = await res.json().catch(() => ({}));
+    return { data: json, status: res.status };
+  } catch (error) {
+    console.error("updateDog error:", error);
+    return { error: "Network error", status: 500 };
+  }
+}
