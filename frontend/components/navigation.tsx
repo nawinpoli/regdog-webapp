@@ -15,15 +15,15 @@ const Navigation = () => {
     { icon: Dog, label: "โปรไฟล์", pathname: "/profile" },
   ];
   return (
-    <nav className="flex justify-between items-center flex-row w-fit h-[62px] bg-blue-200 rounded-full absolute bottom-[35px]">
+    <nav className="flex justify-between items-center flex-row w-fit h-[62px] bg-blue-200 rounded-full absolute bottom-[20px] px-3 gap-1">
       {navigationItems.map((item, index) => (
         <button
           key={index}
           onClick={() => {
             Router.push(item.pathname);
           }}
-          className={`flex items-center justify-center w-[74px] h-[40px] cursor-pointer hover:bg-ffeca5 rounded-full
-            ${item.pathname === pathname ? "flex-row bg-ffeca5" : "flex-col"}`}
+          className={`flex items-center w-[74px] h-[40px] cursor-pointer hover:bg-ffeca5 rounded-full
+            ${item.pathname === pathname ? "flex-row bg-ffeca5 justify-evenly" : "flex-col justify-center"}`}
         >
           <div className="text-black ">
             <item.icon />

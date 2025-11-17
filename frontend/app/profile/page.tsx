@@ -1,5 +1,6 @@
 "use client";
 
+import Bar from "@/components/bar";
 import Navigation from "@/components/navigation";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
@@ -70,6 +71,7 @@ const handleChange = (
 
   return (
     <div className="mobile flex flex-col items-center px-4">
+      <Bar />
       <div className="flex flex-col items-center w-full rounded-[15px] px-2.5 py-2.5 bg-white shadow-[0_1px_4px_rgba(0,0,0,0.25)]">
         {/* avatar */}
         <div className="relative w-fit">
