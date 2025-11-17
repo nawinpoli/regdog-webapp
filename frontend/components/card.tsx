@@ -6,6 +6,7 @@ import {
   Scale,
   ArrowRight,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type Dog = {
   id: number;
@@ -18,6 +19,16 @@ type Dog = {
 };
 
 const Card = ({ dog }: { dog: Dog }) => {
+
+    const router = useRouter();
+
+    const petId = dog.id;
+
+    function handlePage() {
+        localStorage.setItem('petId', petId.toString());
+        router.push('/home');
+    }
+
   return (
     <div className="bg-white rounded-2xl shadow-sm p-3 flex gap-4 border border-[#D1EBF5]">
       {/* Dog image */}
@@ -42,7 +53,7 @@ const Card = ({ dog }: { dog: Dog }) => {
 
         {/* Button */}
         <div className="mt-2 flex justify-end">
-          <button className="flex items-center gap-1 bg-[#FFD774] px-4 py-1.5 rounded-full font-medium text-gray-800">
+          <button className="flex items-center gap-1 bg-[#FFD774] px-4 py-1.5 rounded-full font-medium text-gray-800" onClick={()=>handlePage()}>
             ต่อไป <ArrowRight className="h-4 w-4" />
           </button>
         </div>
